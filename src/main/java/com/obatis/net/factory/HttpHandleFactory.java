@@ -70,19 +70,19 @@ public class HttpHandleFactory {
 		manager.setDefaultMaxPerRoute(manager.getMaxTotal());
 	}
 
-	private static CloseableHttpClient buildHttpClient(CookieStore cookieStore) {
+	private static CloseableHttpClient buildHttpClient(CookieStore cookie) {
 
 		HttpClientBuilder builder = HttpClients.custom();
 		builder.setConnectionManagerShared(true);
 		builder.setConnectionManager(manager);
-		if(cookieStore != null) {
-			builder.setDefaultCookieStore(cookieStore);
+		if(cookie != null) {
+			builder.setDefaultCookieStore(cookie);
 		}
 		return builder.build();
 	}
 
 
-	protected static HttpResponseResult load(String url, Map<String, Object> params, CookieStore cookie, String method, Map<String, Object> headers) {
+	protected static HttpResponseResult load(String url, Map<String, Object> params, String method, CookieStore cookie, Map<String, Object> headers) {
 
 		if (url.endsWith("/")) {
 			url = url.substring(0, url.length() - 1);

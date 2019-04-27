@@ -99,7 +99,7 @@ public class HttpHandler {
 	 * @return
 	 */
 	public static HttpResponseResult post(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
-		return HttpHandleFactory.load(url, params, cookie, DefaultHttpConstant.REQ_METHOD_POST, headers);
+		return HttpHandleFactory.load(url, params, DefaultHttpConstant.REQ_METHOD_POST, cookie, headers);
 	}
 	
 	/**
@@ -178,6 +178,6 @@ public class HttpHandler {
 	 * @return
 	 */
 	public static HttpResponseResult get(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
-		return HttpHandleFactory.load(url, params, cookie, DefaultHttpConstant.REQ_METHOD_GET, headers);
+		return HttpHandleFactory.load(url, params, DefaultHttpConstant.REQ_METHOD_GET, cookie, headers);
 	}
 }
