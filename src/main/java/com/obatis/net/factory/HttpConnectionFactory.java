@@ -2,7 +2,7 @@ package com.obatis.net.factory;
 
 import com.obatis.constant.NormalCommonConstant;
 import com.obatis.constant.http.DefaultHttpConstant;
-import com.obatis.net.ResponseResult;
+import com.obatis.net.HttpResponseResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -81,7 +81,7 @@ public class HttpConnectionFactory {
 	}
 
 
-	protected static ResponseResult load(String url, Map<String, Object> param, CookieStore cookieStore, String method, Map<String, Object> headers) {
+	protected static HttpResponseResult load(String url, Map<String, Object> param, CookieStore cookieStore, String method, Map<String, Object> headers) {
 
 		if (url.endsWith("/")) {
 			url = url.substring(0, url.length() - 1);
@@ -95,7 +95,7 @@ public class HttpConnectionFactory {
 	}
 
 	// 以下代码为连接
-	private static ResponseResult load(HttpUriRequest request, CookieStore cookieStore) {
+	private static HttpResponseResult load(HttpUriRequest request, CookieStore cookieStore) {
 
 		CloseableHttpClient client = null;
 		String content = null;
@@ -152,10 +152,10 @@ public class HttpConnectionFactory {
 			}
 		}
 
-		ResponseResult result = new ResponseResult();
-		result.setCode(status);
+		HttpResponseResult result = new HttpResponseResult();
+		result.setStatus(status);
 		result.setResult(content);
-		result.setCookieStore(cookieStore);
+		result.setCookie(cookieStore);
 		return result;
 	}
 

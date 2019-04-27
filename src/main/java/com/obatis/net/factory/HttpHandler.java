@@ -1,7 +1,7 @@
 package com.obatis.net.factory;
 
 import com.obatis.constant.http.DefaultHttpConstant;
-import com.obatis.net.ResponseResult;
+import com.obatis.net.HttpResponseResult;
 import org.apache.http.client.CookieStore;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public class HttpHandler {
 	 * @param url HTTP 请求url地址
 	 * @return
 	 */
-	public static ResponseResult post(String url) {
+	public static HttpResponseResult post(String url) {
 		return post(url, null);
 	}
 	
@@ -38,7 +38,7 @@ public class HttpHandler {
 	 * @param param 请求参数
 	 * @return
 	 */
-	public static ResponseResult post(String url, Map<String, Object> param) {
+	public static HttpResponseResult post(String url, Map<String, Object> param) {
 		return post(url, param, null, null);
 	}
 	
@@ -51,7 +51,7 @@ public class HttpHandler {
 	 * @return
 	 */
 	@Deprecated
-	public static ResponseResult post(String url, Map<String, Object> param, CookieStore cookieStore) {
+	public static HttpResponseResult post(String url, Map<String, Object> param, CookieStore cookieStore) {
 		return post(url, param, cookieStore, null);
 	}
 	
@@ -62,7 +62,7 @@ public class HttpHandler {
 	 * @param cookieStore cookie信息
 	 * @return
 	 */
-	public static ResponseResult postCookie(String url, Map<String, Object> param, CookieStore cookieStore) {
+	public static HttpResponseResult postCookie(String url, Map<String, Object> param, CookieStore cookieStore) {
 		return post(url, param, cookieStore, null);
 	}
 	
@@ -75,7 +75,7 @@ public class HttpHandler {
 	 * @return
 	 */
 	@Deprecated
-	public static ResponseResult post(String url, Map<String, Object> param, Map<String, Object> headers) {
+	public static HttpResponseResult post(String url, Map<String, Object> param, Map<String, Object> headers) {
 		return post(url, param, null, headers);
 	}
 	
@@ -86,7 +86,7 @@ public class HttpHandler {
 	 * @param headers header信息
 	 * @return
 	 */
-	public static ResponseResult postHeader(String url, Map<String, Object> param, Map<String, Object> headers) {
+	public static HttpResponseResult postHeader(String url, Map<String, Object> param, Map<String, Object> headers) {
 		return post(url, param, null, headers);
 	}
 	
@@ -98,7 +98,7 @@ public class HttpHandler {
 	 * @param headers header信息
 	 * @return
 	 */
-	public static ResponseResult post(String url, Map<String, Object> param, CookieStore cookieStore, Map<String, Object> headers) {
+	public static HttpResponseResult post(String url, Map<String, Object> param, CookieStore cookieStore, Map<String, Object> headers) {
 		return HttpConnectionFactory.load(url, param, cookieStore, DefaultHttpConstant.REQ_METHOD_POST, headers);
 	}
 	
@@ -107,7 +107,7 @@ public class HttpHandler {
 	 * @param url HTTP 请求url地址
 	 * @return
 	 */
-	public static ResponseResult get(String url) {
+	public static HttpResponseResult get(String url) {
 		return get(url, null);
 	}
 	
@@ -117,7 +117,7 @@ public class HttpHandler {
 	 * @param param 请求参数
 	 * @return
 	 */
-	public static ResponseResult get(String url, Map<String, Object> param) {
+	public static HttpResponseResult get(String url, Map<String, Object> param) {
 		return get(url, param, null, null);
 	}
 	
@@ -130,7 +130,7 @@ public class HttpHandler {
 	 * @return
 	 */
 	@Deprecated
-	public static ResponseResult get(String url, Map<String, Object> param, CookieStore cookieStore) {
+	public static HttpResponseResult get(String url, Map<String, Object> param, CookieStore cookieStore) {
 		return get(url, param, cookieStore, null);
 	}
 	
@@ -141,7 +141,7 @@ public class HttpHandler {
 	 * @param cookieStore  cookie信息
 	 * @return
 	 */
-	public static ResponseResult getCookie(String url, Map<String, Object> param, CookieStore cookieStore) {
+	public static HttpResponseResult getCookie(String url, Map<String, Object> param, CookieStore cookieStore) {
 		return get(url, param, cookieStore, null);
 	}
 	
@@ -154,7 +154,7 @@ public class HttpHandler {
 	 * @return
 	 */
 	@Deprecated
-	public static ResponseResult get(String url, Map<String, Object> param, Map<String, Object> headers) {
+	public static HttpResponseResult get(String url, Map<String, Object> param, Map<String, Object> headers) {
 		return get(url, param, null, headers);
 	}
 	
@@ -165,7 +165,7 @@ public class HttpHandler {
 	 * @param headers header信息
 	 * @return
 	 */
-	public static ResponseResult getHeader(String url, Map<String, Object> param, Map<String, Object> headers) {
+	public static HttpResponseResult getHeader(String url, Map<String, Object> param, Map<String, Object> headers) {
 		return get(url, param, null, headers);
 	}
 	
@@ -177,7 +177,7 @@ public class HttpHandler {
 	 * @param headers header信息
 	 * @return
 	 */
-	public static ResponseResult get(String url, Map<String, Object> param, CookieStore cookieStore, Map<String, Object> headers) {
+	public static HttpResponseResult get(String url, Map<String, Object> param, CookieStore cookieStore, Map<String, Object> headers) {
 		return HttpConnectionFactory.load(url, param, cookieStore, DefaultHttpConstant.REQ_METHOD_GET, headers);
 	}
 }
