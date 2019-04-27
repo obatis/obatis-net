@@ -17,7 +17,7 @@ public class HttpHandler {
 	 */
 	public static void setConnectionTimeOut(int timeout) throws RuntimeException {
 		if(timeout > 0) {
-			HttpConnectionFactory.SETTING_CONNECT_TIME_OUT = timeout;
+			HttpHandleFactory.SETTING_TIME_OUT = timeout;
 		} else {
 			throw new RuntimeException("error:timeout value invalid");
 		}
@@ -35,71 +35,71 @@ public class HttpHandler {
 	/**
 	 * HTTP POST 方式请求。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
+	 * @param params 请求参数
 	 * @return
 	 */
-	public static HttpResponseResult post(String url, Map<String, Object> param) {
-		return post(url, param, null, null);
+	public static HttpResponseResult post(String url, Map<String, Object> params) {
+		return post(url, params, null, null);
 	}
 	
 	/**
 	 * HTTP POST 方式请求，支持传入 Cookie 信息。
 	 * 该方法于 1.2.1 弃用，改由 postWithCookie 方法替代。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
-	 * @param cookieStore cookie信息
+	 * @param params 请求参数
+	 * @param cookie cookie信息
 	 * @return
 	 */
 	@Deprecated
-	public static HttpResponseResult post(String url, Map<String, Object> param, CookieStore cookieStore) {
-		return post(url, param, cookieStore, null);
+	public static HttpResponseResult post(String url, Map<String, Object> params, CookieStore cookie) {
+		return post(url, params, cookie, null);
 	}
 	
 	/**
 	 * HTTP POST 方式请求，支持传入 Cookie 信息。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
-	 * @param cookieStore cookie信息
+	 * @param params 请求参数
+	 * @param cookie cookie信息
 	 * @return
 	 */
-	public static HttpResponseResult postCookie(String url, Map<String, Object> param, CookieStore cookieStore) {
-		return post(url, param, cookieStore, null);
+	public static HttpResponseResult postCookie(String url, Map<String, Object> params, CookieStore cookie) {
+		return post(url, params, cookie, null);
 	}
 	
 	/**
 	 * HTTP POST 方式请求，支持传入 Header 信息。
 	 * 该方法于 1.2.1 弃用，改由 postWithHeader 方法替代。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
+	 * @param params 请求参数
 	 * @param headers header信息
 	 * @return
 	 */
 	@Deprecated
-	public static HttpResponseResult post(String url, Map<String, Object> param, Map<String, Object> headers) {
-		return post(url, param, null, headers);
+	public static HttpResponseResult post(String url, Map<String, Object> params, Map<String, Object> headers) {
+		return post(url, params, null, headers);
 	}
 	
 	/**
 	 * HTTP POST 方式请求，支持传入 Header 信息。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
+	 * @param params 请求参数
 	 * @param headers header信息
 	 * @return
 	 */
-	public static HttpResponseResult postHeader(String url, Map<String, Object> param, Map<String, Object> headers) {
-		return post(url, param, null, headers);
+	public static HttpResponseResult postHeader(String url, Map<String, Object> params, Map<String, Object> headers) {
+		return post(url, params, null, headers);
 	}
 	
 	/**
 	 * HTTP POST 方式请求
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
-	 * @param cookieStore cookie信息
+	 * @param params 请求参数
+	 * @param cookie cookie信息
 	 * @param headers header信息
 	 * @return
 	 */
-	public static HttpResponseResult post(String url, Map<String, Object> param, CookieStore cookieStore, Map<String, Object> headers) {
-		return HttpConnectionFactory.load(url, param, cookieStore, DefaultHttpConstant.REQ_METHOD_POST, headers);
+	public static HttpResponseResult post(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
+		return HttpHandleFactory.load(url, params, cookie, DefaultHttpConstant.REQ_METHOD_POST, headers);
 	}
 	
 	/**
@@ -114,70 +114,70 @@ public class HttpHandler {
 	/**
 	 * HTTP GET 方式请求。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
+	 * @param params 请求参数
 	 * @return
 	 */
-	public static HttpResponseResult get(String url, Map<String, Object> param) {
-		return get(url, param, null, null);
+	public static HttpResponseResult get(String url, Map<String, Object> params) {
+		return get(url, params, null, null);
 	}
 	
 	/**
 	 * HTTP GET 方式请求，支持传入cookie。
 	 * 该方法于 1.2.1 弃用，改由 getWithCookie 方法替代。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
-	 * @param cookieStore  cookie信息
+	 * @param params 请求参数
+	 * @param cookie  cookie信息
 	 * @return
 	 */
 	@Deprecated
-	public static HttpResponseResult get(String url, Map<String, Object> param, CookieStore cookieStore) {
-		return get(url, param, cookieStore, null);
+	public static HttpResponseResult get(String url, Map<String, Object> params, CookieStore cookie) {
+		return get(url, params, cookie, null);
 	}
 	
 	/**
 	 * HTTP GET 方式请求，支持传入cookie。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
-	 * @param cookieStore  cookie信息
+	 * @param params 请求参数
+	 * @param cookie  cookie信息
 	 * @return
 	 */
-	public static HttpResponseResult getCookie(String url, Map<String, Object> param, CookieStore cookieStore) {
-		return get(url, param, cookieStore, null);
+	public static HttpResponseResult getCookie(String url, Map<String, Object> params, CookieStore cookie) {
+		return get(url, params, cookie, null);
 	}
 	
 	/**
 	 * HTTP GET 方式请求，支持传入Header。
 	 * 该方法于 1.2.1 弃用，改由 getWithHeader 方法替代。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
+	 * @param params 请求参数
 	 * @param headers header信息
 	 * @return
 	 */
 	@Deprecated
-	public static HttpResponseResult get(String url, Map<String, Object> param, Map<String, Object> headers) {
-		return get(url, param, null, headers);
+	public static HttpResponseResult get(String url, Map<String, Object> params, Map<String, Object> headers) {
+		return get(url, params, null, headers);
 	}
 	
 	/**
 	 * HTTP GET 方式请求，支持传入Header。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
+	 * @param params 请求参数
 	 * @param headers header信息
 	 * @return
 	 */
-	public static HttpResponseResult getHeader(String url, Map<String, Object> param, Map<String, Object> headers) {
-		return get(url, param, null, headers);
+	public static HttpResponseResult getHeader(String url, Map<String, Object> params, Map<String, Object> headers) {
+		return get(url, params, null, headers);
 	}
 	
 	/**
 	 * HTTP GET 方式请求。
 	 * @param url HTTP 请求url地址
-	 * @param param 请求参数
-	 * @param cookieStore  cookie信息
+	 * @param params 请求参数
+	 * @param cookie  cookie信息
 	 * @param headers header信息
 	 * @return
 	 */
-	public static HttpResponseResult get(String url, Map<String, Object> param, CookieStore cookieStore, Map<String, Object> headers) {
-		return HttpConnectionFactory.load(url, param, cookieStore, DefaultHttpConstant.REQ_METHOD_GET, headers);
+	public static HttpResponseResult get(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
+		return HttpHandleFactory.load(url, params, cookie, DefaultHttpConstant.REQ_METHOD_GET, headers);
 	}
 }
