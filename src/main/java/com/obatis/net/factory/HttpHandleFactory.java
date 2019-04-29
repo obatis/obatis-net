@@ -64,9 +64,13 @@ public class HttpHandleFactory {
 		final Registry<ConnectionSocketFactory> register = RegistryBuilder.<ConnectionSocketFactory> create()
 				.register("http", PlainConnectionSocketFactory.INSTANCE).register("https", new SSLConnectionSocketFactory(context, verifier)).build();
 		manager = new PoolingHttpClientConnectionManager(register);
-		// 设置连接池的最大连接数
-		manager.setMaxTotal(150);
-		// 一个路由的最大连接数，尽量保证性能
+		/**
+		 * 设置连接池的最大连接数，设置最大连接数为50个
+		 */
+		manager.setMaxTotal(50);
+		/**
+		 * 为了保证 http发起的性能问题，设置http路由的最大数量
+		 */
 		manager.setDefaultMaxPerRoute(manager.getMaxTotal());
 	}
 
@@ -81,7 +85,15 @@ public class HttpHandleFactory {
 		return builder.build();
 	}
 
-
+	/**
+	 * 对外提供接口，发起 http 请求
+	 * @param url
+	 * @param params
+	 * @param method
+	 * @param cookie
+	 * @param headers
+	 * @return
+	 */
 	protected static HttpResponseResult load(String url, Map<String, Object> params, String method, CookieStore cookie, Map<String, Object> headers) {
 
 		if (url.endsWith("/")) {
@@ -95,7 +107,12 @@ public class HttpHandleFactory {
 		return load(request, cookie);
 	}
 
-	// 以下代码为连接
+	/**
+	 * 发起 http 请求连接
+	 * @param request
+	 * @param cookie
+	 * @return
+	 */
 	private static HttpResponseResult load(HttpUriRequest request, CookieStore cookie) {
 
 		CloseableHttpClient client = null;
@@ -112,17 +129,18 @@ public class HttpHandleFactory {
 			HttpClientContext context = new HttpClientContext();
 			context.setCookieStore(cookie);
 			
-			// 执行请求
 			response = client.execute(request, context);
-			
+
 			entity = response.getEntity();
 			content = EntityUtils.toString(entity, NormalCommonConstant.CHARSET_UTF8);
 			status = response.getStatusLine().getStatusCode();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			/**
+			 * 释放 http 请求连接
+			 */
 			if (entity != null) {
-				// 关闭数据流
 				EntityUtils.consumeQuietly(entity);
 			}
 			if (response != null) {
@@ -134,8 +152,10 @@ public class HttpHandleFactory {
 			}
 
 			if (request != null) {
+				/**
+				 * 中止释放非正常请求的 http 连接
+				 */
 				if (HttpStatus.SC_OK != status) {
-					// 中止请求连接
 					try {
 						request.abort();
 					} catch (Exception e) {
@@ -143,7 +163,10 @@ public class HttpHandleFactory {
 					}
 				}
 			}
-			
+
+			/**
+			 * 关闭客户端发起的 http 连接
+			 */
 			if(client != null) {
 				try {
 					client.close();
@@ -160,6 +183,10 @@ public class HttpHandleFactory {
 		return result;
 	}
 
+	/**
+	 * http 超时设置
+	 * @return
+	 */
 	private static RequestConfig setRequestTimeOutConfig() {
 		/**
 		 * 设置 HTTP 请求超时
@@ -171,6 +198,14 @@ public class HttpHandleFactory {
 		return builder.build();
 	}
 
+	/**
+	 * 处理 http 请求的参数
+	 * @param url
+	 * @param params
+	 * @param method
+	 * @param headers
+	 * @return
+	 */
 	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers) {
 
 		List<NameValuePair> param = new ArrayList<>();
@@ -206,10 +241,11 @@ public class HttpHandleFactory {
 		 * 设置 http 请求的配置信息
 		 */
 		builder.setConfig(setRequestTimeOutConfig());
-		// 设置编码
 		builder.setCharset(Charset.forName(NormalCommonConstant.CHARSET_UTF8));
-		
-		// 设置参数
+
+		/**
+		 * 进行 http 请求参数绑定
+		 */
 		if (param.size() > 0) {
 			builder.addParameters(param.toArray(new BasicNameValuePair[param.size()]));
 		}
