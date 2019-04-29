@@ -15,7 +15,7 @@ public class HttpHandler {
 	 * @param timeout
 	 * @throws Exception 
 	 */
-	public static void setConnectionTimeOut(int timeout) throws RuntimeException {
+	public static void setTimeOut(int timeout) throws RuntimeException {
 		if(timeout > 0) {
 			HttpHandleFactory.SETTING_TIME_OUT = timeout;
 		} else {
@@ -34,7 +34,7 @@ public class HttpHandler {
 	
 	/**
 	 * HTTP POST 方式请求。
-	 * @param url HTTP 请求url地址
+	 * @param url    HTTP 请求url地址
 	 * @param params 请求参数
 	 * @return
 	 */
@@ -44,7 +44,7 @@ public class HttpHandler {
 
 	/**
 	 * HTTP POST 方式请求，支持传入 Cookie 信息。
-	 * @param url HTTP 请求url地址
+	 * @param url    HTTP 请求url地址
 	 * @param params 请求参数
 	 * @param cookie cookie信息
 	 * @return
@@ -55,8 +55,8 @@ public class HttpHandler {
 
 	/**
 	 * HTTP POST 方式请求，支持传入 Header 信息。
-	 * @param url HTTP 请求url地址
-	 * @param params 请求参数
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
 	 * @param headers header信息
 	 * @return
 	 */
@@ -66,9 +66,9 @@ public class HttpHandler {
 	
 	/**
 	 * HTTP POST 方式请求
-	 * @param url HTTP 请求url地址
-	 * @param params 请求参数
-	 * @param cookie cookie信息
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @param cookie  cookie信息
 	 * @param headers header信息
 	 * @return
 	 */
@@ -87,8 +87,8 @@ public class HttpHandler {
 	
 	/**
 	 * HTTP GET 方式请求。
-	 * @param url HTTP 请求url地址
-	 * @param params 请求参数
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
 	 * @return
 	 */
 	public static HttpResponseResult get(String url, Map<String, Object> params) {
@@ -97,8 +97,8 @@ public class HttpHandler {
 
 	/**
 	 * HTTP GET 方式请求，支持传入cookie。
-	 * @param url HTTP 请求url地址
-	 * @param params 请求参数
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
 	 * @param cookie  cookie信息
 	 * @return
 	 */
@@ -108,8 +108,8 @@ public class HttpHandler {
 
 	/**
 	 * HTTP GET 方式请求，支持传入Header。
-	 * @param url HTTP 请求url地址
-	 * @param params 请求参数
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
 	 * @param headers header信息
 	 * @return
 	 */
@@ -119,8 +119,8 @@ public class HttpHandler {
 	
 	/**
 	 * HTTP GET 方式请求。
-	 * @param url HTTP 请求url地址
-	 * @param params 请求参数
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
 	 * @param cookie  cookie信息
 	 * @param headers header信息
 	 * @return
