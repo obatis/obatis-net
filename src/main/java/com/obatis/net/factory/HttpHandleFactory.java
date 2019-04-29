@@ -184,15 +184,15 @@ public class HttpHandleFactory {
 		}
 
 		RequestBuilder builder = null;
+		/**
+		 * 判断发起的请求是否为 post，进行 RequestBuilder 的初始化
+		 */
 		if (DefaultHttpConstant.REQ_METHOD_POST.equals(method)) {
-			// post请求
 			builder = RequestBuilder.post(url);
 		} else {
-			// get请求
 			builder = RequestBuilder.get(url);
 		}
 		
-		// 设置header
 		if(headers != null) {
 			for (Map.Entry<String, Object> entry : headers.entrySet()) {
 				if(ValidateTool.isEmpty(entry.getValue())) {
@@ -201,8 +201,10 @@ public class HttpHandleFactory {
 				builder.addHeader(entry.getKey(), entry.getValue().toString());
 			}
 		}
-		
-		// 设置超时时间
+
+		/**
+		 * 设置 http 请求的配置信息
+		 */
 		builder.setConfig(setRequestTimeOutConfig());
 		// 设置编码
 		builder.setCharset(Charset.forName(NormalCommonConstant.CHARSET_UTF8));
