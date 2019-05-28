@@ -1,6 +1,6 @@
 package com.obatis.net.factory;
 
-import com.obatis.constant.http.DefaultHttpConstant;
+import com.obatis.constant.http.HttpConstant;
 import com.obatis.net.HttpResponseResult;
 import org.apache.http.client.CookieStore;
 
@@ -73,7 +73,7 @@ public class HttpHandler {
 	 * @return
 	 */
 	public static HttpResponseResult post(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
-		return HttpHandleFactory.load(url, params, DefaultHttpConstant.REQ_METHOD_POST, cookie, headers);
+		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_POST, cookie, headers);
 	}
 	
 	/**
@@ -126,6 +126,6 @@ public class HttpHandler {
 	 * @return
 	 */
 	public static HttpResponseResult get(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
-		return HttpHandleFactory.load(url, params, DefaultHttpConstant.REQ_METHOD_GET, cookie, headers);
+		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_GET, cookie, headers);
 	}
 }

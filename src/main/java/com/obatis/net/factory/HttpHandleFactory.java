@@ -1,7 +1,7 @@
 package com.obatis.net.factory;
 
 import com.obatis.constant.NormalCommonConstant;
-import com.obatis.constant.http.DefaultHttpConstant;
+import com.obatis.constant.http.HttpConstant;
 import com.obatis.net.HttpResponseResult;
 import com.obatis.validate.ValidateTool;
 import org.apache.http.HttpEntity;
@@ -222,7 +222,7 @@ public class HttpHandleFactory {
 		/**
 		 * 判断发起的请求是否为 post，进行 RequestBuilder 的初始化
 		 */
-		if (DefaultHttpConstant.REQ_METHOD_POST.equals(method)) {
+		if (HttpConstant.METHOD_POST.equals(method)) {
 			builder = RequestBuilder.post(url);
 		} else {
 			builder = RequestBuilder.get(url);
