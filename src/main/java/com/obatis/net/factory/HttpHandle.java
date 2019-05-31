@@ -6,9 +6,9 @@ import org.apache.http.client.CookieStore;
 
 import java.util.Map;
 
-public class HttpHandler {
+public class HttpHandle {
 	
-	private HttpHandler(){}
+	private HttpHandle(){}
 
 	/**
 	 * 设置http请求超时时间，只需设置一次即可，不用每次调用都设置，默认150秒
