@@ -13,7 +13,6 @@ import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -126,10 +125,10 @@ public class HttpHandleFactory {
 				cookie = new BasicCookieStore();
 			}
 			client = buildHttpClient(cookie);
-			HttpClientContext context = new HttpClientContext();
-			context.setCookieStore(cookie);
+//			HttpClientContext context = new HttpClientContext();
+//			context.setCookieStore(cookie);
 			
-			response = client.execute(request, context);
+			response = client.execute(request);
 
 			entity = response.getEntity();
 			content = EntityUtils.toString(entity, NormalCommonConstant.CHARSET_UTF8);
