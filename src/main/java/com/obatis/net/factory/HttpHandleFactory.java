@@ -22,7 +22,6 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -49,7 +48,7 @@ public class HttpHandleFactory {
 	private HttpHandleFactory() {
 	}
 
-	private static PoolingHttpClientConnectionManager manager = null;
+	private static PoolingHttpClientConnectionManager manager;
 
 	static {
 		SSLContext context = null;
@@ -64,9 +63,9 @@ public class HttpHandleFactory {
 				.register("http", PlainConnectionSocketFactory.INSTANCE).register("https", new SSLConnectionSocketFactory(context, verifier)).build();
 		manager = new PoolingHttpClientConnectionManager(register);
 		/**
-		 * 设置连接池的最大连接数，设置最大连接数为50个
+		 * 设置连接池的最大连接数，设置最大连接数为1000个
 		 */
-		manager.setMaxTotal(50);
+		manager.setMaxTotal(1000);
 		/**
 		 * 为了保证 http发起的性能问题，设置http路由的最大数量
 		 */
@@ -75,7 +74,7 @@ public class HttpHandleFactory {
 
 	private static CloseableHttpClient buildHttpClient(CookieStore cookie) {
 
-		HttpClientBuilder builder = HttpClients.custom();
+		HttpClientBuilder builder = HttpClientBuilder.create();
 		builder.setConnectionManagerShared(true);
 		builder.setConnectionManager(manager);
 		if(cookie != null) {
@@ -125,9 +124,6 @@ public class HttpHandleFactory {
 				cookie = new BasicCookieStore();
 			}
 			client = buildHttpClient(cookie);
-//			HttpClientContext context = new HttpClientContext();
-//			context.setCookieStore(cookie);
-			
 			response = client.execute(request);
 
 			entity = response.getEntity();
@@ -150,6 +146,17 @@ public class HttpHandleFactory {
 				}
 			}
 
+			/**
+			 * 关闭客户端发起的 http 连接
+			 */
+			if(client != null) {
+				try {
+					client.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
 			if (request != null) {
 				/**
 				 * 中止释放非正常请求的 http 连接
@@ -160,17 +167,6 @@ public class HttpHandleFactory {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
-			}
-
-			/**
-			 * 关闭客户端发起的 http 连接
-			 */
-			if(client != null) {
-				try {
-					client.close();
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -187,9 +183,7 @@ public class HttpHandleFactory {
 	 * @return
 	 */
 	private static RequestConfig setRequestTimeOutConfig() {
-		/**
-		 * 设置 HTTP 请求超时
-		 */
+		// 设置 HTTP 请求超时
 		Builder builder = RequestConfig.custom();
 		builder.setConnectTimeout(TIME_OUT);
 		builder.setConnectionRequestTimeout(TIME_OUT);
@@ -217,7 +211,7 @@ public class HttpHandleFactory {
 			}
 		}
 
-		RequestBuilder builder = null;
+		RequestBuilder builder;
 		/**
 		 * 判断发起的请求是否为 post，进行 RequestBuilder 的初始化
 		 */
