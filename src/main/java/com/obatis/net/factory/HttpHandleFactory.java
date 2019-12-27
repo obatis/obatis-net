@@ -94,12 +94,12 @@ public class HttpHandleFactory {
 	 */
 	protected static HttpResponseResult load(String url, Map<String, Object> params, String method, CookieStore cookie, Map<String, Object> headers) {
 
-		if (url.endsWith("/")) {
-			url = url.substring(0, url.length() - 1);
-		}
-		if (url.endsWith("?")) {
-			url = url.substring(0, url.length() - 1);
-		}
+//		if (url.endsWith("/")) {
+//			url = url.substring(0, url.length() - 1);
+//		}
+//		if (url.endsWith("?")) {
+//			url = url.substring(0, url.length() - 1);
+//		}
 
 		HttpUriRequest request = setRequestParam(url, params, method, headers);
 		return load(request, cookie);
