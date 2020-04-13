@@ -1,9 +1,10 @@
 package com.obatis.net.factory;
 
-import com.obatis.constant.NormalCommonConstant;
+import com.obatis.constant.CharsetConstant;
 import com.obatis.constant.http.HttpConstant;
+import com.obatis.convert.JsonCommonConvert;
 import com.obatis.net.HttpResponseResult;
-import com.obatis.validate.ValidateTool;
+import com.obatis.tools.ValidateTool;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -31,10 +32,7 @@ import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class HttpHandleFactory {
 
@@ -92,16 +90,8 @@ public class HttpHandleFactory {
 	 * @param headers
 	 * @return
 	 */
-	protected static HttpResponseResult load(String url, Map<String, Object> params, String method, CookieStore cookie, Map<String, Object> headers) {
-
-//		if (url.endsWith("/")) {
-//			url = url.substring(0, url.length() - 1);
-//		}
-//		if (url.endsWith("?")) {
-//			url = url.substring(0, url.length() - 1);
-//		}
-
-		HttpUriRequest request = setRequestParam(url, params, method, headers);
+	protected static HttpResponseResult load(String url, Map<String, Object> params, String method, CookieStore cookie, Map<String, Object> headers, HttpRequestConstant.ContentType contentType) {
+		HttpUriRequest request = setRequestParam(url, params, method, headers, contentType);
 		return load(request, cookie);
 	}
 
@@ -127,7 +117,7 @@ public class HttpHandleFactory {
 			response = client.execute(request);
 
 			entity = response.getEntity();
-			content = EntityUtils.toString(entity, NormalCommonConstant.CHARSET_UTF8);
+			content = EntityUtils.toString(entity, CharsetConstant.CHARSET_UTF8);
 			status = response.getStatusLine().getStatusCode();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -199,14 +189,15 @@ public class HttpHandleFactory {
 	 * @param headers
 	 * @return
 	 */
-	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers) {
+	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers, HttpRequestConstant.ContentType contentType) {
 
 		List<NameValuePair> param = new ArrayList<>();
 
 		if (params != null) {
 			Set<Map.Entry<String, Object>> entrySet = params.entrySet();
 			for (Map.Entry<String, Object> e : entrySet) {
-				NameValuePair pair = new BasicNameValuePair(e.getKey(), (e.getValue() != null) ? e.getValue().toString() : "");
+//				NameValuePair pair = new BasicNameValuePair(e.getKey(), (e.getValue() != null) ? e.getValue().toString() : "");
+				NameValuePair pair = new BasicNameValuePair(e.getKey(), JsonCommonConvert.objConvertJson(e.getValue()));
 				param.add(pair);
 			}
 		}
@@ -220,7 +211,14 @@ public class HttpHandleFactory {
 		} else {
 			builder = RequestBuilder.get(url);
 		}
-		
+
+		if(contentType.equals(HttpRequestConstant.ContentType.JSON)) {
+			if (headers == null) {
+				headers = new HashMap<>();
+			}
+			headers.put(HttpRequestConstant.CONTENT_TYPE_KEY, HttpRequestConstant.CONTENT_TYPE_JSON);
+		}
+
 		if(headers != null) {
 			for (Map.Entry<String, Object> entry : headers.entrySet()) {
 				if(ValidateTool.isEmpty(entry.getValue())) {
@@ -234,7 +232,7 @@ public class HttpHandleFactory {
 		 * 设置 http 请求的配置信息
 		 */
 		builder.setConfig(setRequestTimeOutConfig());
-		builder.setCharset(Charset.forName(NormalCommonConstant.CHARSET_UTF8));
+		builder.setCharset(Charset.forName(CharsetConstant.CHARSET_UTF8));
 
 		/**
 		 * 进行 http 请求参数绑定

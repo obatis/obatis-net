@@ -31,6 +31,15 @@ public class HttpHandle {
 	public static HttpResponseResult post(String url) {
 		return post(url, null);
 	}
+
+	/**
+	 * HTTP POST json 方式请求。Content-Type 属性为 application/json
+	 * @param url HTTP 请求url地址
+	 * @return
+	 */
+	public static HttpResponseResult postJson(String url) {
+		return postJson(url, null);
+	}
 	
 	/**
 	 * HTTP POST 方式请求。
@@ -40,6 +49,16 @@ public class HttpHandle {
 	 */
 	public static HttpResponseResult post(String url, Map<String, Object> params) {
 		return post(url, params, null, null);
+	}
+
+	/**
+	 * HTTP POST json 方式请求。Content-Type 属性为 application/json
+	 * @param url       HTTP 请求url地址
+	 * @param params    请求参数
+	 * @return
+	 */
+	public static HttpResponseResult postJson(String url, Map<String, Object> params) {
+		return postJson(url, params, null, null);
 	}
 
 	/**
@@ -54,6 +73,17 @@ public class HttpHandle {
 	}
 
 	/**
+	 * HTTP POST 方式请求，支持传入 Cookie 信息。Content-Type 属性为 application/json
+	 * @param url    HTTP 请求url地址
+	 * @param params 请求参数
+	 * @param cookie cookie信息
+	 * @return
+	 */
+	public static HttpResponseResult postJson(String url, Map<String, Object> params, CookieStore cookie) {
+		return postJson(url, params, cookie, null);
+	}
+
+	/**
 	 * HTTP POST 方式请求，支持传入 Header 信息。
 	 * @param url     HTTP 请求url地址
 	 * @param params  请求参数
@@ -62,6 +92,17 @@ public class HttpHandle {
 	 */
 	public static HttpResponseResult post(String url, Map<String, Object> params, Map<String, Object> headers) {
 		return post(url, params, null, headers);
+	}
+
+	/**
+	 * HTTP POST 方式请求，支持传入 Header 信息。Content-Type 属性为 application/json
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @param headers header信息
+	 * @return
+	 */
+	public static HttpResponseResult postJson(String url, Map<String, Object> params, Map<String, Object> headers) {
+		return postJson(url, params, null, headers);
 	}
 	
 	/**
@@ -73,7 +114,19 @@ public class HttpHandle {
 	 * @return
 	 */
 	public static HttpResponseResult post(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
-		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_POST, cookie, headers);
+		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_POST, cookie, headers, HttpRequestConstant.ContentType.NORMAL);
+	}
+
+	/**
+	 * HTTP POST 方式请求, Content-Type 属性为 application/json
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @param cookie  cookie信息
+	 * @param headers header信息
+	 * @return
+	 */
+	public static HttpResponseResult postJson(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
+		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_POST, cookie, headers, HttpRequestConstant.ContentType.JSON);
 	}
 	
 	/**
@@ -84,6 +137,15 @@ public class HttpHandle {
 	public static HttpResponseResult get(String url) {
 		return get(url, null);
 	}
+
+	/**
+	 * HTTP GET 方式请求。Content-Type 属性为 application/json
+	 * @param url HTTP 请求url地址
+	 * @return
+	 */
+	public static HttpResponseResult getJson(String url) {
+		return getJson(url, null);
+	}
 	
 	/**
 	 * HTTP GET 方式请求。
@@ -93,6 +155,16 @@ public class HttpHandle {
 	 */
 	public static HttpResponseResult get(String url, Map<String, Object> params) {
 		return get(url, params, null, null);
+	}
+
+	/**
+	 * HTTP GET 方式请求。Content-Type 属性为 application/json
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @return
+	 */
+	public static HttpResponseResult getJson(String url, Map<String, Object> params) {
+		return getJson(url, params, null, null);
 	}
 
 	/**
@@ -107,6 +179,17 @@ public class HttpHandle {
 	}
 
 	/**
+	 * HTTP GET 方式请求，支持传入cookie。Content-Type 属性为 application/json
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @param cookie  cookie信息
+	 * @return
+	 */
+	public static HttpResponseResult getJson(String url, Map<String, Object> params, CookieStore cookie) {
+		return getJson(url, params, cookie, null);
+	}
+
+	/**
 	 * HTTP GET 方式请求，支持传入Header。
 	 * @param url     HTTP 请求url地址
 	 * @param params  请求参数
@@ -115,6 +198,17 @@ public class HttpHandle {
 	 */
 	public static HttpResponseResult get(String url, Map<String, Object> params, Map<String, Object> headers) {
 		return get(url, params, null, headers);
+	}
+
+	/**
+	 * HTTP GET 方式请求，支持传入Header。Content-Type 属性为 application/json
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @param headers header信息
+	 * @return
+	 */
+	public static HttpResponseResult getJson(String url, Map<String, Object> params, Map<String, Object> headers) {
+		return getJson(url, params, null, headers);
 	}
 	
 	/**
@@ -126,6 +220,18 @@ public class HttpHandle {
 	 * @return
 	 */
 	public static HttpResponseResult get(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
-		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_GET, cookie, headers);
+		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_GET, cookie, headers, HttpRequestConstant.ContentType.NORMAL);
+	}
+
+	/**
+	 * HTTP GET 方式请求。Content-Type 属性为 application/json
+	 * @param url     HTTP 请求url地址
+	 * @param params  请求参数
+	 * @param cookie  cookie信息
+	 * @param headers header信息
+	 * @return
+	 */
+	public static HttpResponseResult getJson(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
+		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_GET, cookie, headers, HttpRequestConstant.ContentType.JSON);
 	}
 }
