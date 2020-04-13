@@ -5,7 +5,7 @@
 
     <groupId>com.obatis</groupId>
     <artifactId>obatis-net</artifactId>
-    <version>1.0.5.2-beta</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
     <name>obatis-net</name>
     <description>obatis-net, network httpclient</description>
@@ -13,17 +13,9 @@
 
     <distributionManagement>
         <repository>
-            <id>private-oss</id>
-            <url>http://maven.gclasp.com/nexus/content/repositories/releases/</url>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <!--<snapshotRepository>-->
-            <!--<id>oss</id>-->
-            <!--<url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-        <!--</snapshotRepository>-->
-        <!--<repository>-->
-            <!--<id>oss</id>-->
-            <!--<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-        <!--</repository>-->
     </distributionManagement>
 
     <properties>
