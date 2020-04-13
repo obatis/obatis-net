@@ -7,7 +7,6 @@ import com.obatis.net.HttpResponseResult;
 import com.obatis.tools.ValidateTool;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.config.RequestConfig.Builder;
@@ -20,11 +19,11 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.HostnameVerifier;
@@ -32,7 +31,9 @@ import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class HttpHandleFactory {
 
@@ -91,7 +92,15 @@ public class HttpHandleFactory {
 	 * @return
 	 */
 	protected static HttpResponseResult load(String url, Map<String, Object> params, String method, CookieStore cookie, Map<String, Object> headers, HttpRequestConstant.ContentType contentType) {
-		HttpUriRequest request = setRequestParam(url, params, method, headers, contentType);
+
+		if(contentType.equals(HttpRequestConstant.ContentType.JSON)) {
+			if (headers == null) {
+				headers = new HashMap<>();
+			}
+			headers.put(HttpRequestConstant.CONTENT_TYPE_KEY, HttpRequestConstant.CONTENT_TYPE_JSON);
+		}
+
+		HttpUriRequest request = setRequestParam(url, params, method, headers);
 		return load(request, cookie);
 	}
 
@@ -114,6 +123,7 @@ public class HttpHandleFactory {
 				cookie = new BasicCookieStore();
 			}
 			client = buildHttpClient(cookie);
+
 			response = client.execute(request);
 
 			entity = response.getEntity();
@@ -189,18 +199,7 @@ public class HttpHandleFactory {
 	 * @param headers
 	 * @return
 	 */
-	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers, HttpRequestConstant.ContentType contentType) {
-
-		List<NameValuePair> param = new ArrayList<>();
-
-		if (params != null) {
-			Set<Map.Entry<String, Object>> entrySet = params.entrySet();
-			for (Map.Entry<String, Object> e : entrySet) {
-//				NameValuePair pair = new BasicNameValuePair(e.getKey(), (e.getValue() != null) ? e.getValue().toString() : "");
-				NameValuePair pair = new BasicNameValuePair(e.getKey(), JsonCommonConvert.objConvertJson(e.getValue()));
-				param.add(pair);
-			}
-		}
+	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers) {
 
 		RequestBuilder builder;
 		/**
@@ -208,15 +207,22 @@ public class HttpHandleFactory {
 		 */
 		if (HttpConstant.METHOD_POST.equals(method)) {
 			builder = RequestBuilder.post(url);
-		} else {
-			builder = RequestBuilder.get(url);
-		}
 
-		if(contentType.equals(HttpRequestConstant.ContentType.JSON)) {
-			if (headers == null) {
-				headers = new HashMap<>();
+			if(params != null && !params.isEmpty()) {
+				builder.setEntity(new StringEntity(JsonCommonConvert.objConvertJson(params), CharsetConstant.CHARSET_UTF8));
 			}
-			headers.put(HttpRequestConstant.CONTENT_TYPE_KEY, HttpRequestConstant.CONTENT_TYPE_JSON);
+		} else {
+
+			// get 形式请求参数封装
+
+			builder = RequestBuilder.get(url);
+
+			if (params != null && !params.isEmpty()) {
+				Set<Map.Entry<String, Object>> entrySet = params.entrySet();
+				for (Map.Entry<String, Object> e : entrySet) {
+					builder.addParameter(e.getKey(), (e.getValue() != null) ? e.getValue().toString() : "");
+				}
+			}
 		}
 
 		if(headers != null) {
@@ -234,12 +240,7 @@ public class HttpHandleFactory {
 		builder.setConfig(setRequestTimeOutConfig());
 		builder.setCharset(Charset.forName(CharsetConstant.CHARSET_UTF8));
 
-		/**
-		 * 进行 http 请求参数绑定
-		 */
-		if (param.size() > 0) {
-			builder.addParameters(param.toArray(new BasicNameValuePair[param.size()]));
-		}
 		return builder.build();
 	}
+
 }
