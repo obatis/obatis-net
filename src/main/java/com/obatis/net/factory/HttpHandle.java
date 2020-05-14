@@ -1,11 +1,9 @@
 package com.obatis.net.factory;
 
 import com.obatis.constant.http.HttpConstant;
-import com.obatis.convert.JsonCommonConvert;
 import com.obatis.net.HttpResponseResult;
 import org.apache.http.client.CookieStore;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class HttpHandle {
@@ -237,22 +235,4 @@ public class HttpHandle {
 		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_GET, cookie, headers, HttpRequestConstant.ContentType.JSON);
 	}
 
-//	public static void main(String[] args) {
-//		String data = "{\"name\" : \"xiaoming\", \"info\":{\"age\":11}}";
-//		String test = "adb";
-//		System.out.println(test);
-//		System.out.println(data);
-//		System.out.println(JsonCommonConvert.objConvertJson(data));
-//	}
-
-	public static void main(String[] args) {
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("sn", "3175051481");
-		params.put("key", "20181029CWXT0MD2J12");
-		params.put("mapType", "baidu");
-
-		HttpResponseResult result = HttpHandle.get("http://www.008gps.com/api/Tracking.aspx", params);
-		System.out.println(JsonCommonConvert.objConvertJson(result));
-	}
 }

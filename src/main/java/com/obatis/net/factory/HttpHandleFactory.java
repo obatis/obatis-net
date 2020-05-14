@@ -100,7 +100,7 @@ public class HttpHandleFactory {
 			headers.put(HttpRequestConstant.CONTENT_TYPE_KEY, HttpRequestConstant.CONTENT_TYPE_JSON);
 		}
 
-		HttpUriRequest request = setRequestParam(url, params, method, headers);
+		HttpUriRequest request = setRequestParam(url, params, method, headers, contentType);
 		return load(request, cookie);
 	}
 
@@ -199,7 +199,7 @@ public class HttpHandleFactory {
 	 * @param headers
 	 * @return
 	 */
-	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers) {
+	private static HttpUriRequest setRequestParam(String url, Map<String, Object> params, String method, Map<String, Object> headers, HttpRequestConstant.ContentType contentType) {
 
 		RequestBuilder builder;
 		/**
@@ -207,22 +207,11 @@ public class HttpHandleFactory {
 		 */
 		if (HttpConstant.METHOD_POST.equals(method)) {
 			builder = RequestBuilder.post(url);
-
-			if(params != null && !params.isEmpty()) {
-				builder.setEntity(new StringEntity(JsonCommonConvert.objConvertJson(params), CharsetConstant.CHARSET_UTF8));
-			}
+			setParams(builder, method, params, contentType);
 		} else {
-
 			// get 形式请求参数封装
-
 			builder = RequestBuilder.get(url);
-
-			if (params != null && !params.isEmpty()) {
-				Set<Map.Entry<String, Object>> entrySet = params.entrySet();
-				for (Map.Entry<String, Object> e : entrySet) {
-					builder.addParameter(e.getKey(), (e.getValue() != null) ? e.getValue().toString() : "");
-				}
-			}
+			setParams(builder, method, params, contentType);
 		}
 
 		if(headers != null) {
@@ -241,6 +230,29 @@ public class HttpHandleFactory {
 		builder.setCharset(Charset.forName(CharsetConstant.CHARSET_UTF8));
 
 		return builder.build();
+	}
+
+	/**
+	 * 设置参数内容
+	 * @param builder
+	 * @param method
+	 * @param params
+	 * @param contentType
+	 */
+	private static void setParams(RequestBuilder builder, String method, Map<String, Object> params, HttpRequestConstant.ContentType contentType) {
+
+		if(params == null || params.isEmpty()) {
+			return;
+		}
+
+		if (HttpConstant.METHOD_POST.equals(method) && contentType.equals(HttpRequestConstant.ContentType.JSON)) {
+			builder.setEntity(new StringEntity(JsonCommonConvert.objConvertJson(params), CharsetConstant.CHARSET_UTF8));
+		} else {
+			Set<Map.Entry<String, Object>> entrySet = params.entrySet();
+			for (Map.Entry<String, Object> e : entrySet) {
+				builder.addParameter(e.getKey(), (e.getValue() != null) ? e.getValue().toString() : "");
+			}
+		}
 	}
 
 }
