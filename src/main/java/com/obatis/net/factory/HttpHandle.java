@@ -234,5 +234,4 @@ public class HttpHandle {
 	public static HttpResponseResult getJson(String url, Map<String, Object> params, CookieStore cookie, Map<String, Object> headers) {
 		return HttpHandleFactory.load(url, params, HttpConstant.METHOD_GET, cookie, headers, HttpRequestConstant.ContentType.JSON);
 	}
-
 }
