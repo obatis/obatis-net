@@ -2,7 +2,7 @@ package com.obatis.net.factory;
 
 import com.obatis.constant.CharsetConstant;
 import com.obatis.constant.http.HttpConstant;
-import com.obatis.convert.JsonCommonConvert;
+import com.obatis.convert.JsonConvert;
 import com.obatis.net.HttpResponseResult;
 import com.obatis.tools.ValidateTool;
 import org.apache.http.HttpEntity;
@@ -246,7 +246,7 @@ public class HttpHandleFactory {
 		}
 
 		if (HttpConstant.METHOD_POST.equals(method) && contentType.equals(HttpRequestConstant.ContentType.JSON)) {
-			builder.setEntity(new StringEntity(JsonCommonConvert.objConvertJson(params), CharsetConstant.CHARSET_UTF8));
+			builder.setEntity(new StringEntity(JsonConvert.objConvertJson(params), CharsetConstant.CHARSET_UTF8));
 		} else {
 			Set<Map.Entry<String, Object>> entrySet = params.entrySet();
 			for (Map.Entry<String, Object> e : entrySet) {
